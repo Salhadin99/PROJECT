@@ -53,6 +53,7 @@ function App() {
                 </tr>
                 <tr>
                   <td>Languages:</td>
+                  <td>{countryInfo.languages.join(', ')}</td>
                 </tr>
               </tbody>
             </table>
