@@ -6,10 +6,30 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f4f4f4;
+  font-family: 'Arial', sans-serif;
+  background-color: #f2f2f2;
 }
 
 .container {
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+.search-section {
+  margin-bottom: 20px;
+}
+
+.random-countries {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Adjust the number of columns as needed */
+  gap: 20px;
+  width: 100%;
+}
+
+.random-country {
   text-align: center;
 }
 
@@ -28,5 +48,6 @@ button {
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
+  /* width: 100%; */
 }
 

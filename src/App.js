@@ -1,9 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
   const [countryName, setCountryName] = useState('');
   const [countryInfo, setCountryInfo] = useState(null);
+  const [randomCountries, setRandomCountries] = useState([]);
+
+  useEffect(() => {
+    // Fetch 20 random countries when the component mounts
+    async function fetchRandomCountries() {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = await response.json();
+
+        const randomCountriesData = data
+          .sort(() => Math.random() - 0.5) // Shuffle the array to get random countries
+          .slice(0, 20)
+          .map((country) => ({
+            name: country.name.common,
+            flag: country.flags.png,
+            details: country,
+          }));
+
+        setRandomCountries(randomCountriesData);
+      } catch (error) {
+        console.error('Error fetching random countries:', error);
+      }
+    }
+
+    fetchRandomCountries();
+  }, []); // Empty dependency array to fetch only once
 
   const searchCountry = async () => {
     try {
@@ -28,10 +54,20 @@ function App() {
     }
   };
 
+  const handleRandomCountryClick = (details) => {
+    setCountryInfo({
+      name: details.name.common,
+      flag: details.flags.png,
+      capital: details.capital,
+      population: details.population.toLocaleString(),
+      languages: details.languages ? Object.values(details.languages).join(', ') : 'N/A',
+    });
+  };
+
   return (
     <div className="container">
       <h1>Country Information App</h1>
-      <div>
+      <div className="search-section">
         <input
           type="text"
           value={countryName}
@@ -63,7 +99,18 @@ function App() {
             </table>
           </div>
         ) : (
-          <p>Please enter a valid country name.</p>
+          <div className="random-countries">
+            {randomCountries.map((randomCountry) => (
+              <div
+                key={randomCountry.name}
+                className="random-country"
+                onClick={() => handleRandomCountryClick(randomCountry.details)}
+              >
+                <img src={randomCountry.flag} alt={`${randomCountry.name} flag`} width="50" />
+                <p>{randomCountry.name}</p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
@@ -71,4 +118,3 @@ function App() {
 }
 
 export default App;
-
